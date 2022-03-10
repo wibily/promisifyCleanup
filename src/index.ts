@@ -2,7 +2,7 @@ import "./styles.css";
 
 import { PromiseEffect, promisify, promisifyRace } from "./promisifyCleanup";
 
-const noop = () => {};
+const noop = () => { };
 
 const transitionEnd = (element: Element | null): PromiseEffect => (
   resolve,
