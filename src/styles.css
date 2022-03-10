@@ -1,0 +1,16 @@
+body {
+  font-family: sans-serif;
+}
+
+#block {
+  display: inline-block;
+  background: red;
+  height: 50px;
+  width: 100px;
+  transition: width 1s, height 1s;
+}
+
+#block.animate {
+  width: 50px;
+  height: 100px;
+}
