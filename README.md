@@ -28,5 +28,6 @@ promisifyRace([
 )
 ```
 
-Dev.to article: https://dev.to/derp/promisifying-css-animation-with-timeout-fallback-28ml
-Codesandbox link: https://codesandbox.io/s/animationend-fiddle-o2scuh
+## Additional resources
+- Dev.to article: https://dev.to/derp/promisifying-css-animation-with-timeout-fallback-28ml
+- Codesandbox link: https://codesandbox.io/s/animationend-fiddle-o2scuh
