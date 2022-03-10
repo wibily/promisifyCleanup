@@ -16,32 +16,46 @@ export const promisify = (f: PromiseEffect): PromiseCleanup => {
   return [new Promise(executor), cleanupFn as Effect];
 };
 
-type PromiseMethod = (values: Promise<unknown>[]) => Promise<unknown>;
-
-const promisifyCombinator = (promiseCleanups: PromiseCleanup[]) => (
-  promiseMethod: PromiseMethod
+export const promisifyRace = (
+  promiseCleanups: PromiseCleanup[]
 ): Promise<unknown> => {
   const promises = promiseCleanups.map(([promise, _]) => promise);
   const cleanups = promiseCleanups.map(([, cleanup]) => cleanup);
 
-  return promiseMethod(promises).finally(() => {
-    console.log("cleaning house");
+  return Promise.race(promises).finally(() => {
     cleanups.forEach((cleanup) => cleanup());
   });
 };
 
-export const promisifyRace = (
-  promiseCleanups: PromiseCleanup[]
-): Promise<unknown> => promisifyCombinator(promiseCleanups)(Promise.race);
-
 export const promisifyAll = (
   promiseCleanups: PromiseCleanup[]
-): Promise<unknown> => promisifyCombinator(promiseCleanups)(Promise.all);
+): Promise<unknown> => {
+  const promises = promiseCleanups.map(([promise, _]) => promise);
+  const cleanups = promiseCleanups.map(([, cleanup]) => cleanup);
+
+  return Promise.all(promises).finally(() => {
+    cleanups.forEach((cleanup) => cleanup());
+  });
+};
 
 export const promisifyAllSettled = (
   promiseCleanups: PromiseCleanup[]
-): Promise<unknown> => promisifyCombinator(promiseCleanups)(Promise.allSettled);
+): Promise<unknown> => {
+  const promises = promiseCleanups.map(([promise, _]) => promise);
+  const cleanups = promiseCleanups.map(([, cleanup]) => cleanup);
+
+  return Promise.allSettled(promises).finally(() => {
+    cleanups.forEach((cleanup) => cleanup());
+  });
+};
 
 export const promisifyAny = (
   promiseCleanups: PromiseCleanup[]
-): Promise<unknown> => promisifyCombinator(promiseCleanups)(Promise.any);
+): Promise<unknown> => {
+  const promises = promiseCleanups.map(([promise, _]) => promise);
+  const cleanups = promiseCleanups.map(([, cleanup]) => cleanup);
+
+  return Promise.any(promises).finally(() => {
+    cleanups.forEach((cleanup) => cleanup());
+  });
+};
